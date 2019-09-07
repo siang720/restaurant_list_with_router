@@ -2,6 +2,11 @@ const express = require("express");
 const port = 3000;
 const app = express();
 const mongoose = require("mongoose");
+const exphbs = require("express-handlebars");
+
+// template engine
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // connect to database
 mongoose.connect("mongodb://localhost/restaurant", { useNewUrlParser: true });
@@ -28,7 +33,7 @@ app.get("/", (req, res) => {
 
 // list all restaurants
 app.get("/restaurants", (req, res) => {
-  res.send("list all restaurant");
+  res.render("index");
 });
 
 // create page
