@@ -15,7 +15,6 @@ db.once("open", () => {
 
   for (var i = 0; i < seedData.results.length; i++) {
     Restaurant.create({
-      id: seedData.results[i].id,
       name: seedData.results[i].name,
       name_en: seedData.results[i].name_en,
       category: seedData.results[i].category,

@@ -3,6 +3,10 @@ const port = 3000;
 const app = express();
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
+const bodyParser = require("body-parser");
+
+// setting body-parser
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // setting static file
 app.use(express.static("public"));
@@ -44,7 +48,7 @@ app.get("/restaurants", (req, res) => {
 
 // create page
 app.get("/restaurants/new", (req, res) => {
-  res.send("add new restaurant");
+  res.render("new");
 });
 
 // restaurant detail
@@ -54,7 +58,24 @@ app.get("/restaurants/:id", (req, res) => {
 
 // create
 app.post("/restaurants", (req, res) => {
-  console.log("Now it is creating");
+  // create restaurant object
+  const restaurant = new Restaurant({
+    name: req.body.name,
+    name_en: req.body.name_en,
+    category: req.body.category,
+    image: req.body.image,
+    location: req.body.location,
+    phone: req.body.phone,
+    google_map: req.body.google_map,
+    rating: req.body.rating,
+    description: req.body.description
+  });
+
+  // save to database
+  restaurant.save(err => {
+    if (err) return console.error(err);
+    return res.redirect("/");
+  });
 });
 
 // edit page
