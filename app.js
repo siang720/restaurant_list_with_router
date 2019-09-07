@@ -4,6 +4,9 @@ const app = express();
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 
+// setting static file
+app.use(express.static("public"));
+
 // template engine
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -24,7 +27,7 @@ db.once("open", () => {
 });
 
 // require restaurant model
-const restaurant = require("./models/restaurant");
+const Restaurant = require("./models/restaurant");
 
 // homepage
 app.get("/", (req, res) => {
@@ -33,7 +36,10 @@ app.get("/", (req, res) => {
 
 // list all restaurants
 app.get("/restaurants", (req, res) => {
-  res.render("index");
+  Restaurant.find((err, restaurants) => {
+    if (err) return console.error(err);
+    return res.render("index", { restaurants: restaurants });
+  });
 });
 
 // create page
@@ -64,6 +70,10 @@ app.put("/restaurants/:id", (req, res) => {
 // delete
 app.delete("/restaurants/:id/delete", (req, res) => {
   console.log("Now it is delete");
+});
+
+app.get("/search", (req, res) => {
+  res.send("search results");
 });
 
 app.listen(port, () => {
