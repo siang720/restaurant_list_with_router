@@ -125,7 +125,16 @@ app.delete("/restaurants/:id/delete", (req, res) => {
 });
 
 app.get("/search", (req, res) => {
-  res.send("search results");
+  const keyword = req.query.keyword;
+  Restaurant.find((err, restaurants) => {
+    if (err) return console.error(err);
+    return res.render("index", {
+      restaurants: restaurants.filter(restaurant => {
+        return restaurant.name.toLowerCase().includes(keyword.toLowerCase());
+      }),
+      keyword: keyword
+    });
+  });
 });
 
 app.listen(port, () => {
