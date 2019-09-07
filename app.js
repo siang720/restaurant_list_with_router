@@ -53,7 +53,10 @@ app.get("/restaurants/new", (req, res) => {
 
 // restaurant detail
 app.get("/restaurants/:id", (req, res) => {
-  res.send("detail");
+  Restaurant.findById(req.params.id, (err, restaurant) => {
+    if (err) return console.error(err);
+    return res.render("detail", { restaurant: restaurant });
+  });
 });
 
 // create
