@@ -2,6 +2,15 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-10 mx-auto">
+      <div class="d-flex justify-content-start">
+        <a class="btn btn-link" href="/restaurants" role="button">Back</a>
+        <a class="btn btn-link" href="/restaurants/{{{restaurant.id}}}/edit" role="button">Edit</a>
+        <form action="/restaurants/{{{restaurant.id}}}/delete?_method=DELETE" method="POST" class="mr-1">
+          <button type="submit" class="btn btn-warning">Delete</button>
+        </form>
+      </div>
+    </div>
+    <div class="col-12 col-md-10 mx-auto">
 
       <p class="mb-1">
         <span class="text-secondary">
