@@ -4,6 +4,10 @@ const app = express();
 const mongoose = require("mongoose");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
+
+// setting method-override
+app.use(methodOverride("_method"));
 
 // setting body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -90,7 +94,7 @@ app.get("/restaurants/:id/edit", (req, res) => {
 });
 
 // edit
-app.post("/restaurants/:id", (req, res) => {
+app.put("/restaurants/:id", (req, res) => {
   Restaurant.findById(req.params.id, (err, restaurant) => {
     if (err) return console.error(err);
     restaurant.name = req.body.name;
@@ -111,7 +115,13 @@ app.post("/restaurants/:id", (req, res) => {
 
 // delete
 app.delete("/restaurants/:id/delete", (req, res) => {
-  console.log("Now it is delete");
+  Restaurant.findById(req.params.id, (err, restaurant) => {
+    if (err) return console.error(err);
+    restaurant.remove(err => {
+      if (err) return console.error(err);
+      return res.redirect("/");
+    });
+  });
 });
 
 app.get("/search", (req, res) => {
