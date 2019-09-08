@@ -34,109 +34,114 @@ db.once("open", () => {
   console.log("mongodb connected!");
 });
 
-// require restaurant model
-const Restaurant = require("./models/restaurant");
-
-// homepage
-app.get("/", (req, res) => {
-  res.redirect("/restaurants");
-});
-
-// list all restaurants
-app.get("/restaurants", (req, res) => {
-  Restaurant.find((err, restaurants) => {
-    if (err) return console.error(err);
-    return res.render("index", { restaurants: restaurants });
-  });
-});
-
-// create page
-app.get("/restaurants/new", (req, res) => {
-  res.render("new");
-});
-
-// restaurant detail
-app.get("/restaurants/:id", (req, res) => {
-  Restaurant.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err);
-    return res.render("detail", { restaurant: restaurant });
-  });
-});
-
-// create
-app.post("/restaurants", (req, res) => {
-  // create restaurant object
-  const restaurant = new Restaurant({
-    name: req.body.name,
-    name_en: req.body.name_en,
-    category: req.body.category,
-    image: req.body.image,
-    location: req.body.location,
-    phone: req.body.phone,
-    google_map: req.body.google_map,
-    rating: req.body.rating,
-    description: req.body.description
-  });
-
-  // save to database
-  restaurant.save(err => {
-    if (err) return console.error(err);
-    return res.redirect("/");
-  });
-});
-
-// edit page
-app.get("/restaurants/:id/edit", (req, res) => {
-  Restaurant.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err);
-    return res.render("edit", { restaurant: restaurant });
-  });
-});
-
-// edit
-app.put("/restaurants/:id", (req, res) => {
-  Restaurant.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err);
-    restaurant.name = req.body.name;
-    restaurant.name_en = req.body.name_en;
-    restaurant.category = req.body.category;
-    restaurant.image = req.body.image;
-    restaurant.location = req.body.location;
-    restaurant.phone = req.body.phone;
-    restaurant.google_map = req.body.google_map;
-    restaurant.rating = req.body.rating;
-    restaurant.description = req.body.description;
-    restaurant.save(err => {
-      if (err) return console.error(err);
-      return res.redirect(`/restaurants/${req.params.id}`);
-    });
-  });
-});
-
-// delete
-app.delete("/restaurants/:id/delete", (req, res) => {
-  Restaurant.findById(req.params.id, (err, restaurant) => {
-    if (err) return console.error(err);
-    restaurant.remove(err => {
-      if (err) return console.error(err);
-      return res.redirect("/");
-    });
-  });
-});
-
-app.get("/search", (req, res) => {
-  const keyword = req.query.keyword;
-  Restaurant.find((err, restaurants) => {
-    if (err) return console.error(err);
-    return res.render("index", {
-      restaurants: restaurants.filter(restaurant => {
-        return restaurant.name.toLowerCase().includes(keyword.toLowerCase());
-      }),
-      keyword: keyword
-    });
-  });
-});
+// use router
+app.use("/restaurants", require("./routes/restaurant"));
+app.use("/", require("./routes/home"));
 
 app.listen(port, () => {
   console.log("App is running");
 });
+
+// // require restaurant model
+// const Restaurant = require("./models/restaurant");
+
+// // homepage
+// app.get("/", (req, res) => {
+//   res.redirect("/restaurants");
+// });
+
+// list all restaurants
+// app.get("/restaurants", (req, res) => {
+//   Restaurant.find((err, restaurants) => {
+//     if (err) return console.error(err);
+//     return res.render("index", { restaurants: restaurants });
+//   });
+// });
+
+// // create page
+// app.get("/restaurants/new", (req, res) => {
+//   res.render("new");
+// });
+
+// // restaurant detail
+// app.get("/restaurants/:id", (req, res) => {
+//   Restaurant.findById(req.params.id, (err, restaurant) => {
+//     if (err) return console.error(err);
+//     return res.render("detail", { restaurant: restaurant });
+//   });
+// });
+
+// // create
+// app.post("/restaurants", (req, res) => {
+//   // create restaurant object
+//   const restaurant = new Restaurant({
+//     name: req.body.name,
+//     name_en: req.body.name_en,
+//     category: req.body.category,
+//     image: req.body.image,
+//     location: req.body.location,
+//     phone: req.body.phone,
+//     google_map: req.body.google_map,
+//     rating: req.body.rating,
+//     description: req.body.description
+//   });
+
+//   // save to database
+//   restaurant.save(err => {
+//     if (err) return console.error(err);
+//     return res.redirect("/");
+//   });
+// });
+
+// // edit page
+// app.get("/restaurants/:id/edit", (req, res) => {
+//   Restaurant.findById(req.params.id, (err, restaurant) => {
+//     if (err) return console.error(err);
+//     return res.render("edit", { restaurant: restaurant });
+//   });
+// });
+
+// // edit
+// app.put("/restaurants/:id", (req, res) => {
+//   Restaurant.findById(req.params.id, (err, restaurant) => {
+//     if (err) return console.error(err);
+//     restaurant.name = req.body.name;
+//     restaurant.name_en = req.body.name_en;
+//     restaurant.category = req.body.category;
+//     restaurant.image = req.body.image;
+//     restaurant.location = req.body.location;
+//     restaurant.phone = req.body.phone;
+//     restaurant.google_map = req.body.google_map;
+//     restaurant.rating = req.body.rating;
+//     restaurant.description = req.body.description;
+//     restaurant.save(err => {
+//       if (err) return console.error(err);
+//       return res.redirect(`/restaurants/${req.params.id}`);
+//     });
+//   });
+// });
+
+// // delete
+// app.delete("/restaurants/:id/delete", (req, res) => {
+//   Restaurant.findById(req.params.id, (err, restaurant) => {
+//     if (err) return console.error(err);
+//     restaurant.remove(err => {
+//       if (err) return console.error(err);
+//       return res.redirect("/");
+//     });
+//   });
+// });
+
+// // search
+// app.get("/search", (req, res) => {
+//   const keyword = req.query.keyword;
+//   Restaurant.find((err, restaurants) => {
+//     if (err) return console.error(err);
+//     return res.render("index", {
+//       restaurants: restaurants.filter(restaurant => {
+//         return restaurant.name.toLowerCase().includes(keyword.toLowerCase());
+//       }),
+//       keyword: keyword
+//     });
+//   });
+// });
