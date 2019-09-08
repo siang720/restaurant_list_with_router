@@ -40,14 +40,15 @@
             </div>
           </a>
           <div class="card-footer">
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-end">
               <form action="/restaurants/{{{this.id}}}/edit" method="GET">
                 <button type="submit" class="btn btn-link">Edit</button>
               </form>
               <form action="/restaurants/{{{this.id}}}" method="GET">
                 <button type="submit" class="btn btn-link">Detail</button>
               </form>
-              <form action="/restaurants/{{{this.id}}}/delete?_method=DELETE" method="POST" class="mr-1">
+              <form action="/restaurants/{{{this.id}}}/delete?_method=DELETE" method="POST" class="mr-1"
+                onsubmit="return confirm('確定要移除這家餐廳的資訊嗎？');">
                 <button type="submit" class="btn btn-warning">Delete</button>
               </form>
             </div>

@@ -37,6 +37,7 @@ db.once("open", () => {
 // use router
 app.use("/restaurants", require("./routes/restaurant"));
 app.use("/", require("./routes/home"));
+app.use("/", require("./routes/search"));
 
 app.listen(port, () => {
   console.log("App is running");

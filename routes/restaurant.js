@@ -85,19 +85,5 @@ router.delete("/:id/delete", (req, res) => {
   });
 });
 
-// search
-router.get("/search", (req, res) => {
-  const keyword = req.query.keyword;
-  Restaurant.find((err, restaurants) => {
-    if (err) return console.error(err);
-    return res.render("index", {
-      restaurants: restaurants.filter(restaurant => {
-        return restaurant.name.toLowerCase().includes(keyword.toLowerCase());
-      }),
-      keyword: keyword
-    });
-  });
-});
-
 // 設定 /restaurants 路由
 module.exports = router;
